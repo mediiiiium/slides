@@ -355,6 +355,83 @@
     </div>
   </section>
 
+  <!-- 5b. 使いこなしのコツ ① 文脈 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">使いこなしのコツ · 考え方 ①</div>
+      <h2>文脈を持たせると、<span class="accent">AIは賢くなる</span></h2>
+      <div class="outcome">AIは“前提”を渡すほど、<span class="accent">かしこく動く。</span></div>
+      <div class="cards">
+        <div class="card">
+          <div class="tag">残す</div>
+          <h3>フォルダを意識</h3>
+          <p>作業の経過をファイルに残し、次のセッションや人へ引き継ぐ。</p>
+        </div>
+        <div class="card">
+          <div class="tag">履歴</div>
+          <h3>git の概念</h3>
+          <p>変更の履歴・バージョンを残す。「いつでも前に戻せる」。</p>
+        </div>
+        <div class="card">
+          <div class="tag">共有</div>
+          <h3>GitHub</h3>
+          <p>どこからでも参照。デバイスや人をまたいで共有できる。</p>
+        </div>
+      </div>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>Claude はセッションをまたいで記憶を持たない。だから経緯を <code>.md</code> でフォルダに残し、git で履歴化、GitHub で共有——「このファイル読んで」の一言で文脈を渡せる。実際、下書き管理は Notion から GitHub に移した。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5c. よく出てくる言葉（用語集） -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">使いこなしのコツ · 用語</div>
+      <h2>よく出てくる<span class="accent">言葉</span></h2>
+      <div class="ui-table">
+        <div class="ui-row">
+          <div class="name">呪文</div>
+          <div class="desc">覚えて使い回す、決まり文句のコマンドやプロンプト。<span class="best">長いコマンドをショートカット登録して一発で出す、あの感覚。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">commit<span>コミット</span></div>
+          <div class="desc">変更を「ここまで」と1区切りで記録すること。<span class="best">メッセージ付きのセーブポイント。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">push<span>プッシュ</span></div>
+          <div class="desc">手元の記録（コミット）を GitHub（クラウド）に送ること。<span class="best">commit＝手元に保存／push＝みんなが見える場所へ。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">compact<span>コンパクト</span></div>
+          <div class="desc">会話が長くなったとき、AI がそれまでを要約して圧縮し、続きを話せるようにする仕組み。<span class="best">コンテキスト上限への対策。</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5d. 使いこなしのコツ ② 指示・ループ -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">使いこなしのコツ · 考え方 ②</div>
+      <h2>プロンプト <span class="accent">→ ループ設計へ</span></h2>
+      <div class="outcome">“うまく頼む”から、<span class="accent">“うまく回す”へ。</span></div>
+      <p style="font-size:1.05rem;color:var(--taupe);margin-bottom:.2rem">期待する振る舞いやアウトプットは、まずプロンプト（指示）で伝える。ただ最近は“一発のプロンプト”より、AI に<b style="color:var(--ink)">試す→確認→直す</b>を繰り返させる「ループの設計」へ、ステージが移ってきている。</p>
+      <div class="flow">
+        <span class="step">試す</span><span class="arrow">→</span>
+        <span class="step">確認</span><span class="arrow">→</span>
+        <span class="step">直す</span><span class="arrow">↻</span>
+        <span class="step">くり返す</span>
+      </div>
+      <p class="kicker-line">指示は“ゴール”を渡すだけ。あとは AI が回して近づける。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>いわゆる<b>エージェントループ</b>。実行→出力を<b>フィードバック</b>（テスト・エラー・レビュー）で受け、AI 自身が直して再実行する。プロンプト職人芸から、良し悪しを測る<b>評価（eval）</b>とループ設計へ重心が移りつつある。</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 6. DIVIDER -->
   <section class="slide divider">
     <div class="inner">
@@ -509,83 +586,6 @@
         </div>
       </div>
       <p class="kicker-line">思いついたら作れる——そのハードルが、もう下がっている。</p>
-    </div>
-  </section>
-
-  <!-- 12b. 使いこなしのコツ ① 文脈 -->
-  <section class="slide">
-    <div class="inner">
-      <div class="eyebrow">使いこなしのコツ · 考え方 ①</div>
-      <h2>文脈を持たせると、<span class="accent">AIは賢くなる</span></h2>
-      <div class="outcome">AIは“前提”を渡すほど、<span class="accent">かしこく動く。</span></div>
-      <div class="cards">
-        <div class="card">
-          <div class="tag">残す</div>
-          <h3>フォルダを意識</h3>
-          <p>作業の経過をファイルに残し、次のセッションや人へ引き継ぐ。</p>
-        </div>
-        <div class="card">
-          <div class="tag">履歴</div>
-          <h3>git の概念</h3>
-          <p>変更の履歴・バージョンを残す。「いつでも前に戻せる」。</p>
-        </div>
-        <div class="card">
-          <div class="tag">共有</div>
-          <h3>GitHub</h3>
-          <p>どこからでも参照。デバイスや人をまたいで共有できる。</p>
-        </div>
-      </div>
-      <div class="tech">
-        <div class="label">⚙️ 技術メモ</div>
-        <p>Claude はセッションをまたいで記憶を持たない。だから経緯を <code>.md</code> でフォルダに残し、git で履歴化、GitHub で共有——「このファイル読んで」の一言で文脈を渡せる。実際、下書き管理は Notion から GitHub に移した。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 12b-2. よく出てくる言葉（用語集） -->
-  <section class="slide">
-    <div class="inner">
-      <div class="eyebrow">使いこなしのコツ · 用語</div>
-      <h2>よく出てくる<span class="accent">言葉</span></h2>
-      <div class="ui-table">
-        <div class="ui-row">
-          <div class="name">呪文</div>
-          <div class="desc">覚えて使い回す、決まり文句のコマンドやプロンプト。<span class="best">長いコマンドをショートカット登録して一発で出す、あの感覚。</span></div>
-        </div>
-        <div class="ui-row">
-          <div class="name">commit<span>コミット</span></div>
-          <div class="desc">変更を「ここまで」と1区切りで記録すること。<span class="best">メッセージ付きのセーブポイント。</span></div>
-        </div>
-        <div class="ui-row">
-          <div class="name">push<span>プッシュ</span></div>
-          <div class="desc">手元の記録（コミット）を GitHub（クラウド）に送ること。<span class="best">commit＝手元に保存／push＝みんなが見える場所へ。</span></div>
-        </div>
-        <div class="ui-row">
-          <div class="name">compact<span>コンパクト</span></div>
-          <div class="desc">会話が長くなったとき、AI がそれまでを要約して圧縮し、続きを話せるようにする仕組み。<span class="best">コンテキスト上限への対策。</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 12c. 使いこなしのコツ ② 指示・ループ -->
-  <section class="slide">
-    <div class="inner">
-      <div class="eyebrow">使いこなしのコツ · 考え方 ②</div>
-      <h2>プロンプト <span class="accent">→ ループ設計へ</span></h2>
-      <div class="outcome">“うまく頼む”から、<span class="accent">“うまく回す”へ。</span></div>
-      <p style="font-size:1.05rem;color:var(--taupe);margin-bottom:.2rem">期待する振る舞いやアウトプットは、まずプロンプト（指示）で伝える。ただ最近は“一発のプロンプト”より、AI に<b style="color:var(--ink)">試す→確認→直す</b>を繰り返させる「ループの設計」へ、ステージが移ってきている。</p>
-      <div class="flow">
-        <span class="step">試す</span><span class="arrow">→</span>
-        <span class="step">確認</span><span class="arrow">→</span>
-        <span class="step">直す</span><span class="arrow">↻</span>
-        <span class="step">くり返す</span>
-      </div>
-      <p class="kicker-line">指示は“ゴール”を渡すだけ。あとは AI が回して近づける。</p>
-      <div class="tech">
-        <div class="label">⚙️ 技術メモ</div>
-        <p>いわゆる<b>エージェントループ</b>。実行→出力を<b>フィードバック</b>（テスト・エラー・レビュー）で受け、AI 自身が直して再実行する。プロンプト職人芸から、良し悪しを測る<b>評価（eval）</b>とループ設計へ重心が移りつつある。</p>
-      </div>
     </div>
   </section>
 
