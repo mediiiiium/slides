@@ -8,7 +8,7 @@ GitHub Pages で公開: **https://mediiiiium.github.io/slides/**
 
 | 資料 | 時期 | 内容 |
 | --- | --- | --- |
-| [Claude ミニ勉強会](https://mediiiiium.github.io/slides/claude-study.html) | 2026-07 | Claude の使い方を、ビール事業の実例で紹介 |
+| [リベラルアーツとしてのAI](https://mediiiiium.github.io/slides/claude-study.html) | 2026-07 | Claude の使い方を、ビール事業の実例で紹介 |
 
 ## 資料を追加するには
 
