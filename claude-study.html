@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AIって、実際なにができるの？ — ミニ勉強会</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#FAF9F5;
+    --cream2:#F0EEE6;
+    --panel:#FFFFFF;
+    --clay:#CC785C;
+    --clay-bright:#D97757;
+    --clay-soft:#F3E3DA;
+    --ink:#1F1E1D;
+    --taupe:#6B6660;
+    --taupe-light:#8C867E;
+    --line:#E6E1D6;
+    --line-strong:#D8D2C4;
+    --shadow:0 1px 3px rgba(31,30,29,.05), 0 8px 30px rgba(31,30,29,.06);
+    --maxw:960px;
+    --fs-jp:"Noto Sans JP","Inter",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:var(--fs-jp);
+    background:var(--cream);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+
+  /* progress bar — never intercepts taps */
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0;
+    background:linear-gradient(90deg,var(--clay-bright),var(--clay));
+    z-index:60;transition:width .35s cubic-bezier(.4,0,.2,1);
+    pointer-events:none;
+  }
+
+  /* deck — dead-simple slide engine: only .active is displayed */
+  #deck{position:relative;width:100%;}
+  .slide{
+    display:none;
+    flex-direction:column;justify-content:center;
+    min-height:100vh;min-height:100dvh;
+    padding:6vh 7vw 11vh;
+    overflow-y:auto;
+  }
+  .slide.active{ display:flex; }
+  /* entrance animation only when JS is running — keeps no-JS/Quick Look preview visible */
+  .js .slide.active{ animation:fadeIn .45s ease both; }
+  @keyframes fadeIn{ from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:none;} }
+  .inner{width:100%;max-width:var(--maxw);margin:0 auto;}
+
+  /* typography */
+  .eyebrow{
+    font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--clay);margin-bottom:1.1rem;display:flex;align-items:center;gap:.6rem;
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--clay);display:inline-block;}
+  h1{font-size:clamp(2.1rem,5.4vw,4rem);font-weight:800;line-height:1.12;letter-spacing:-.01em;}
+  h2{font-size:clamp(1.6rem,3.8vw,2.6rem);font-weight:800;line-height:1.2;letter-spacing:-.01em;margin-bottom:.4rem;}
+  h2 .accent{color:var(--clay);}
+  .lead{font-size:clamp(1rem,1.9vw,1.28rem);color:var(--taupe);font-weight:500;margin-top:1.1rem;max-width:46ch;}
+  .outcome{
+    font-size:clamp(1.15rem,2.4vw,1.65rem);font-weight:700;color:var(--ink);
+    margin:.2rem 0 1.4rem;line-height:1.35;
+  }
+  .outcome .accent{color:var(--clay);}
+  p{color:var(--ink);}
+
+  /* lists */
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:.85rem;margin-top:.4rem;}
+  ul.clean li{
+    position:relative;padding-left:1.5rem;font-size:clamp(.98rem,1.7vw,1.12rem);color:var(--ink);
+  }
+  ul.clean li::before{
+    content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:2px;
+    background:var(--clay);
+  }
+  ul.clean li b{font-weight:700;}
+  ul.clean li .muted{color:var(--taupe);}
+
+  /* flow steps */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .55rem;margin:.6rem 0 1.2rem;}
+  .flow .step{
+    background:var(--panel);border:1px solid var(--line-strong);border-radius:10px;
+    padding:.5rem .8rem;font-size:.92rem;font-weight:600;box-shadow:var(--shadow);white-space:nowrap;
+  }
+  .flow .arrow{color:var(--clay);font-weight:700;}
+
+  /* company / model cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.4rem;}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.3rem 1.4rem;
+    box-shadow:var(--shadow);
+  }
+  .card .tag{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--clay);text-transform:uppercase;}
+  .card h3{font-size:1.18rem;font-weight:800;margin:.35rem 0 .5rem;}
+  .card p{font-size:.95rem;color:var(--taupe);line-height:1.55;}
+  .card .pill{display:inline-block;margin-top:.7rem;font-size:.8rem;font-weight:600;color:var(--ink);background:var(--clay-soft);border-radius:999px;padding:.2rem .7rem;}
+
+  /* comparison table */
+  .ui-table{display:flex;flex-direction:column;gap:.6rem;margin-top:.3rem;}
+  .ui-row{
+    display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:1rem;align-items:baseline;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.85rem 1.1rem;box-shadow:var(--shadow);
+  }
+  .ui-row .name{font-weight:800;font-size:1.02rem;}
+  .ui-row .name span{display:block;font-size:.8rem;font-weight:500;color:var(--taupe);margin-top:.1rem;}
+  .ui-row .desc{font-size:.96rem;color:var(--ink);}
+  .ui-row .desc .best{color:var(--clay);font-weight:700;}
+
+  /* timeline */
+  .timeline{display:flex;flex-direction:column;gap:.15rem;margin-top:.3rem;border-left:2px solid var(--line-strong);padding-left:1.2rem;}
+  .tl{position:relative;padding:.55rem 0;}
+  .tl::before{content:"";position:absolute;left:-1.68rem;top:.95rem;width:11px;height:11px;border-radius:50%;background:var(--clay);border:2px solid var(--cream);}
+  .tl .date{font-weight:800;color:var(--clay);font-size:.92rem;letter-spacing:.02em;}
+  .tl .txt{font-size:1rem;color:var(--ink);margin-top:.1rem;}
+  .tl .txt .muted{color:var(--taupe);}
+
+  /* tech note callout */
+  .tech{
+    margin-top:1.4rem;background:var(--cream2);border:1px solid var(--line-strong);
+    border-left:4px solid var(--clay);border-radius:0 12px 12px 0;padding:.85rem 1.1rem;
+  }
+  .tech .label{font-size:.76rem;font-weight:800;letter-spacing:.08em;color:var(--clay);text-transform:uppercase;margin-bottom:.25rem;}
+  .tech p{font-size:.9rem;color:var(--taupe);line-height:1.55;}
+  .tech code{font-family:"Inter",ui-monospace,SFMono-Regular,Menlo,monospace;background:#EFEAE0;padding:.05rem .35rem;border-radius:5px;font-size:.85em;color:var(--ink);}
+
+  .note{font-size:.9rem;color:var(--taupe-light);margin-top:.9rem;}
+  .kicker-line{font-size:1.05rem;color:var(--clay);font-weight:700;margin-top:1.2rem;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem 2rem;}
+  @media (max-width:760px){.two-col{grid-template-columns:1fr;}}
+
+  .step-num{display:flex;flex-direction:column;gap:.9rem;margin-top:.4rem;}
+  .step-num .row{display:flex;gap:.9rem;align-items:flex-start;}
+  .step-num .n{flex:none;width:2rem;height:2rem;border-radius:50%;background:var(--clay);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+  .step-num .row .t{font-size:clamp(1rem,1.8vw,1.15rem);padding-top:.15rem;}
+  .step-num .row .t b{font-weight:700;}
+  .step-num .row .t small{display:block;color:var(--taupe);font-size:.88rem;font-weight:400;margin-top:.1rem;}
+
+  /* title slide */
+  .title-slide .inner{max-width:900px;}
+  .brand-dot{display:inline-flex;align-items:center;gap:.55rem;font-weight:700;color:var(--taupe);font-size:.95rem;margin-bottom:2.2rem;}
+  .brand-dot .d{width:12px;height:12px;border-radius:50%;background:var(--clay);}
+  .hook{
+    display:inline-block;margin-top:1.8rem;font-size:clamp(1.05rem,2.1vw,1.4rem);font-weight:700;color:var(--ink);
+    background:var(--clay-soft);border-radius:999px;padding:.5rem 1.2rem;
+  }
+  .byline{margin-top:2.4rem;color:var(--taupe);font-weight:500;font-size:.98rem;}
+
+  /* divider slide */
+  .divider{background:var(--ink);}
+  .divider .eyebrow{color:var(--clay-bright);}
+  .divider .eyebrow::before{background:var(--clay-bright);}
+  .divider h1{color:var(--cream);}
+  .divider .lead{color:#B8B2A8;}
+
+  /* nav — always-visible, thumb-sized, centered bottom bar */
+  #nav{
+    position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);
+    display:flex;align-items:center;gap:.6rem;z-index:100;pointer-events:auto;
+  }
+  #counter{
+    font-size:1rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:.04em;
+    background:var(--panel);border:1px solid var(--line-strong);border-radius:999px;
+    padding:.6rem 1rem;min-width:5.4rem;text-align:center;box-shadow:var(--shadow);
+  }
+  #counter .cur{color:var(--clay);}
+  .navbtn{
+    width:60px;height:60px;border-radius:50%;border:none;background:var(--clay);
+    color:#fff;font-size:2rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(204,120,92,.42);transition:transform .12s ease, background .15s ease, opacity .15s ease;
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation;padding:0;
+  }
+  .navbtn:hover{background:var(--clay-bright);}
+  .navbtn:active{transform:scale(.9);}
+  .navbtn:disabled{opacity:.32;box-shadow:none;cursor:default;}
+
+  #hint{
+    position:fixed;bottom:5.7rem;left:50%;transform:translateX(-50%);z-index:60;
+    font-size:.82rem;color:var(--taupe);font-weight:600;transition:opacity .6s ease;
+    background:var(--cream2);padding:.28rem .85rem;border-radius:999px;border:1px solid var(--line);white-space:nowrap;
+  }
+  .footer-brand{position:fixed;top:1.1rem;left:1.6rem;z-index:55;font-size:.8rem;font-weight:700;color:var(--taupe-light);letter-spacing:.02em;}
+
+  @media (max-width:760px){
+    .slide{padding:5.5vh 7vw;}
+    .cards{grid-template-columns:1fr;gap:.7rem;}
+    .card{padding:1rem 1.1rem;}
+    .ui-row{grid-template-columns:1fr;gap:.25rem;}
+    .flow .step{font-size:.82rem;padding:.4rem .6rem;}
+    .footer-brand{display:none;}
+    .navbtn{width:56px;height:56px;font-size:1.85rem;}
+    .tech{margin-top:1rem;}
+  }
+  @media (max-height:560px){.slide{justify-content:flex-start;}}
+
+  /* referral link + QR */
+  .referral{display:flex;align-items:center;gap:1.4rem;margin-top:1.5rem;flex-wrap:wrap;}
+  .referral .ref-txt{display:flex;flex-direction:column;gap:.6rem;align-items:flex-start;}
+  .ref-btn{
+    display:inline-block;background:var(--clay);color:#fff;font-weight:800;
+    font-size:clamp(1rem,2vw,1.22rem);padding:.85rem 1.5rem;border-radius:999px;
+    text-decoration:none;box-shadow:0 4px 14px rgba(204,120,92,.42);
+    transition:background .15s ease, transform .12s ease;-webkit-tap-highlight-color:transparent;
+  }
+  .ref-btn:hover{background:var(--clay-bright);transform:translateY(-1px);}
+  .ref-btn:active{transform:translateY(0);}
+  .ref-url{font-family:"Inter",ui-monospace,monospace;font-size:.9rem;color:var(--taupe);word-break:break-all;}
+  .ref-qr{
+    width:200px;height:200px;flex:none;border:1px solid var(--line);border-radius:14px;
+    background:var(--cream);padding:9px;box-shadow:var(--shadow);image-rendering:pixelated;
+  }
+  .divider .ref-url{color:#CFC9BE;}
+  .divider .ref-qr{border-color:#3a3936;}
+  @media (max-width:760px){ .ref-qr{width:172px;height:172px;} .referral{gap:1.1rem;margin-top:1.2rem;} }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="footer-brand">Claude ミニ勉強会</div>
+
+<div id="deck">
+
+  <!-- 1. TITLE -->
+  <section class="slide title-slide active">
+    <div class="inner">
+      <div class="brand-dot"><span class="d"></span>ミニ勉強会 · 2026.07</div>
+      <h1>AIって、<br>実際なにが<span style="color:var(--clay)">できるの？</span></h1>
+      <div class="lead">非エンジニアが Claude で作った、ちいさな自動化たち。</div>
+      <div class="hook">「コードは書けない。でも、任せられる。」</div>
+      <div class="byline">クラフトビールの会社の裏方より</div>
+    </div>
+  </section>
+
+  <!-- 2. AI各社 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">はじめに · 全体像</div>
+      <h2>まず、プレイヤーを<span class="accent">3社だけ</span></h2>
+      <div class="cards">
+        <div class="card">
+          <div class="tag">Anthropic</div>
+          <h3>Claude</h3>
+          <p>今日の主役。安全性を重視。文章と仕事の相棒として強い。</p>
+          <span class="pill">この勉強会の中心</span>
+        </div>
+        <div class="card">
+          <div class="tag">OpenAI</div>
+          <h3>ChatGPT</h3>
+          <p>いちばん有名。標準モデルは GPT-5.5。知名度で先行。</p>
+        </div>
+        <div class="card">
+          <div class="tag">Google</div>
+          <h3>Gemini</h3>
+          <p>検索と一体。Gemini 3.5。調べものにそのまま強い。</p>
+        </div>
+      </div>
+      <p class="note">ほかにも Meta（Llama）、xAI（Grok）、Mistral…たくさんある。でも「まず3社」で十分。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>3社はいずれも“基盤モデル”を自前で持つ胴元。世の中の多くのAIツールは、裏でこの3社のどれかを呼んでいるだけ、というケースが多い。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. モデルの説明 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">はじめに · モデルとは</div>
+      <h2>「モデル」＝ AIの<span class="accent">頭脳の種類</span></h2>
+      <div class="lead" style="margin-top:.6rem">同じ Claude でも、賢さ・速さ・値段のちがう頭脳を、用途で選べる。</div>
+      <div class="cards" style="margin-top:1.2rem">
+        <div class="card">
+          <div class="tag">大 · 賢い</div>
+          <h3>Opus</h3>
+          <p>じっくり考える人。難しい判断・複雑な作業向け。</p>
+        </div>
+        <div class="card">
+          <div class="tag">バランス</div>
+          <h3>Sonnet</h3>
+          <p>ふつうに仕事する人。日常のほとんどはこれで足りる。</p>
+        </div>
+        <div class="card">
+          <div class="tag">速い · 軽い</div>
+          <h3>Haiku</h3>
+          <p>即答する人。単純な仕分け・大量処理を安く速く。</p>
+        </div>
+      </div>
+      <p class="note">他社も同じ構図。GPT-5.5 や Gemini 3.5 Pro／Flash のように「賢い版・速い版」が並ぶ。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>用途でモデルを使い分けるとコスト最適。例：判定は安い <code>Haiku</code>、難所だけ <code>Opus</code>。実際に自分の配達アプリやNow on Tapでもこの使い分けをしている。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. ニュース Fable/Mythos -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">はじめに · 話題のニュース</div>
+      <h2>最近ざわついた話：<span class="accent">Fable 5 と Mythos 5</span></h2>
+      <div class="timeline">
+        <div class="tl"><div class="date">6/9</div><div class="txt">Anthropic が過去最強モデルを公開。<b>Fable 5</b>（一般向け）と <b>Mythos 5</b>（制限付き・政府連携）。<span class="muted">Opusを超える“Mythos級”。</span></div></div>
+        <div class="tl"><div class="date">6/12</div><div class="txt">米政府が輸出管理命令 → 外国人の利用停止を要請。Anthropic は<b>数時間で全ユーザー停止</b>。</div></div>
+        <div class="tl"><div class="date">— 理由</div><div class="txt">安全装置を回避する手口（脆弱性の発見など）への懸念。<span class="muted">Anthropicは「手口は既知で狭い」と説明。</span></div></div>
+        <div class="tl"><div class="date">6/30〜7/1</div><div class="txt">規制が解除され、<b>世界的に復活</b>。新しい安全フィルタを付けて再開。</div></div>
+      </div>
+      <p class="kicker-line">約19日間の“停止”騒動。AIが社会インフラ扱いされ始めた象徴。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>復活時、危険と判定されたリクエストは <code>Opus 4.8</code> に自動フォールバック。99%超をブロックする分類器を追加して安全性を担保した、という設計。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Claudeの入り口 / 使い分け -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">はじめに · Claudeの入り口</div>
+      <h2>同じ Claude、用途で<span class="accent">使い分ける</span></h2>
+      <div class="ui-table">
+        <div class="ui-row">
+          <div class="name">チャット<span>claude.ai</span></div>
+          <div class="desc">会話ベース。相談・調べ物・下書き。<span class="best">一番手軽、まずここから。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">Cowork<span>デスクトップアプリ</span></div>
+          <div class="desc">自分のPCのファイルを触って作業・自動化。<span class="best">非エンジニアのエージェント。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">Code<span>Claude Code</span></div>
+          <div class="desc">ターミナルで動く開発向け。<span class="best">コードをがっつり書く／直す。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">Design<span>Claude Design</span></div>
+          <div class="desc">デザイン・スライド・プロトタイプなど<span class="best">ビジュアルを作る。</span></div>
+        </div>
+      </div>
+      <p class="kicker-line">＋ おまけ：Dispatch — 外出先のスマホから、母艦PCに仕事を投げる。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>入り口は違っても、動かしているのは同じ Claude。Cowork／Code は手元のファイルやCLIを、Design はブラウザ上のキャンバスを扱う。なお <code>Cursor</code> は VS Code 派生の<b>他社製</b>エディタ統合ツール（コード修正向け）で、Claude 純正の入り口ではない。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DIVIDER -->
+  <section class="slide divider">
+    <div class="inner">
+      <div class="eyebrow">ここからが本題</div>
+      <h1>作ってみた。<br>非エンジニアの現場から。</h1>
+      <div class="lead">クラフトビールの会社の裏方仕事を、ひとつずつ自動化していった話。</div>
+    </div>
+  </section>
+
+  <!-- 7. 配達アプリ -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">CASE 01 · 配達アプリ</div>
+      <div class="outcome">配達ルート、<span class="accent">もう頭で悩まない。</span></div>
+      <p style="font-size:1.05rem;color:var(--taupe);margin-bottom:.6rem">ビール樽を飲食店に配達。回る順番を毎回手で考えていた → 自動で最適ルートに。</p>
+      <div class="flow">
+        <span class="step">依頼メッセージ</span><span class="arrow">→</span>
+        <span class="step">店名を抽出</span><span class="arrow">→</span>
+        <span class="step">Google Mapsで最短ルート</span><span class="arrow">→</span>
+        <span class="step">配達ログ</span><span class="arrow">→</span>
+        <span class="step">LINE通知</span>
+      </div>
+      <ul class="clean">
+        <li>今：出発前にスマホで店名を入れる → <b>順番と所要時間</b>が出る。準備のストレスが消えた。</li>
+        <li>おまけ：GitHubに<b>APIキーを晒して大炎上</b> → Claudeに聞いて数分で対処。不正利用はゼロで済んだ。</li>
+      </ul>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>店名抽出は <code>Claude API</code>。ルートは最近傍法＋2optで計算（GAS＋Google Maps API）。キーは <code>ScriptProperties</code> に退避——直書き厳禁を身をもって学んだ。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Podcast -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">CASE 02 · Podcast自動編集</div>
+      <div class="outcome">深夜3時間の編集が、<span class="accent">ビール片手に“待つだけ”</span>に。</div>
+      <div class="flow">
+        <span class="step">マイク3本の生音</span><span class="arrow">→</span>
+        <span class="step">ノイズ除去</span><span class="arrow">→</span>
+        <span class="step">音量正規化</span><span class="arrow">→</span>
+        <span class="step">イントロ/アウトロ結合</span><span class="arrow">→</span>
+        <span class="step">書き出し</span>
+      </div>
+      <ul class="clean">
+        <li>コマンド一発で、<b>文字起こしまで自動</b>。走らせて放っておけば仕上がっている。</li>
+        <li>「始まりました」を探して、冒頭の雑談を<b>自動でカット</b>する小技も後から追加。</li>
+      </ul>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p><code>pipeline.py</code>（実装は Claude Code）。Auphonic API＋<code>ffmpeg</code>（2秒クロスフェード）＋faster-whisper。※初回はサンプルレートのズレで再生速度がバグり、全員ミニオンの声になった。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. BrewDrop -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">CASE 03 · BrewDrop</div>
+      <div class="outcome">埋もれてた新作ビールを、<span class="accent">自動で1か所に集約。</span></div>
+      <p style="font-size:1.02rem;color:var(--taupe);margin-bottom:.6rem">新作リリース情報が飲食店にどさどさ届く → 追いきれない → 結局“有名どころ”しか発注されない。小さいブルワリーが埋もれる問題。</p>
+      <div class="flow">
+        <span class="step">専用メアドにPDFが届く</span><span class="arrow">→</span>
+        <span class="step">AIが中身を読み取り</span><span class="arrow">→</span>
+        <span class="step">スプレッドシート</span><span class="arrow">→</span>
+        <span class="step">サイトに掲載</span>
+      </div>
+      <ul class="clean">
+        <li>ブルワリーごとに<b>バラバラなPDF</b>でも、銘柄・スタイル・ABV・IBUをちゃんと拾う。</li>
+        <li>ブルワリー側は「いつも通りメールを送るだけ」。Webはほぼ自動更新。</li>
+      </ul>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>Cloudflare Mail Routing → GASでDrive保存 → <code>Claude API</code> でPDF抽出 → スプシをDBにしてWeb表示。新しく作ったものはほぼ無く、既存ツールの組み合わせだけで動いた。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Now on Tap -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">CASE 04 · Now on Tap</div>
+      <div class="outcome">「今このバーで何が飲めるか」を、<span class="accent">歩く前に。</span></div>
+      <p style="font-size:1.02rem;color:var(--taupe);margin-bottom:.6rem">店のInstagramを毎回見るのが面倒 → ロボットに毎朝見回らせて、東京のビールDBにする。コンセプトは <b>Walk in knowing.</b></p>
+      <div class="flow">
+        <span class="step">Instagram取得</span><span class="arrow">→</span>
+        <span class="step">Vision AIでビール情報をパース</span><span class="arrow">→</span>
+        <span class="step">データ整備</span><span class="arrow">→</span>
+        <span class="step">DB化</span>
+      </div>
+      <ul class="clean">
+        <li>現実：AIが「ハートランド」を<b>ビアスタイルと誤読（91件）</b>…。<span class="muted">きれいに集めるより、データ掃除が本番だった。</span></li>
+      </ul>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>Instagramは難読化対策でUIでなくデータ取得。GitHub Actionsで毎朝5時に巡回。表記ゆれは“決定的マップ”で固定し、初見の難物だけAIに投げる——ゆらぎ判断を毎回AIに投げると、逆にゆらぎが増える。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Others 1 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">その他 · こまごま ①</div>
+      <h2>仕事まわりで、ほかにも</h2>
+      <div class="cards" style="margin-top:1.1rem">
+        <div class="card">
+          <div class="tag">SaaS連携</div>
+          <h3>mcp-jp</h3>
+          <p>日本のSaaS（freee・勤怠・採用…）を<b style="color:var(--ink)">MCPでAIに直結</b>。現在34サービス。公式が出ない“空白地帯”を埋める。</p>
+        </div>
+        <div class="card">
+          <div class="tag">ノウハウ</div>
+          <h3>skill-jp</h3>
+          <p>「日本の業務のコツ」を Claude に教える<b style="color:var(--ink)">スキル集</b>。同じ説明を毎回しなくてよくなる。</p>
+        </div>
+        <div class="card">
+          <div class="tag">なんちゃってOSS開発</div>
+          <h3>Vauban</h3>
+          <p>非エンジニアが自作の“開発ツール”を、<b style="color:var(--ink)">OSSっぽく各リポジトリに配って回す</b>話。コードの安全網を自動で展開。</p>
+        </div>
+      </div>
+      <p class="kicker-line">やらかしを自動で止める安全網を、全リポジトリに配って回る。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ（Vauban）</div>
+        <p>正体は versioned <code>setup.sh</code>。commit前に detect-secrets（鍵の流出を止める）、push前に Gemini が差分レビュー、PRで Semgrep/Qodo を束ねる“縦深防御”。毎月1日 Haiku が全リポに再配布してバージョンを自動で揃え、最奥に人間の最終確認（Zion check）を残す。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Others 2 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">その他 · こまごま ②</div>
+      <h2>仕事じゃないやつも</h2>
+      <div class="cards" style="margin-top:1.1rem">
+        <div class="card">
+          <div class="tag">音で遊ぶ</div>
+          <h3>Jari</h3>
+          <p>90年代サンプラー風の、ブラウザ音楽アプリ。パッドを叩いて遊ぶ。</p>
+        </div>
+        <div class="card">
+          <div class="tag">子育て</div>
+          <h3>漢字ドリル</h3>
+          <p>息子向け。AIが漢字を書く時代に、あえて“書く練習”を自動生成。</p>
+        </div>
+        <div class="card">
+          <div class="tag">趣味</div>
+          <h3>サッカー作戦ボード</h3>
+          <p>選手を動かして作戦を組むボード。思いつきをそのまま形に。</p>
+        </div>
+      </div>
+      <p class="kicker-line">思いついたら作れる——そのハードルが、もう下がっている。</p>
+    </div>
+  </section>
+
+  <!-- 12b. 使いこなしのコツ ① 文脈 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">使いこなしのコツ · 考え方 ①</div>
+      <h2>文脈を持たせると、<span class="accent">AIは賢くなる</span></h2>
+      <div class="outcome">AIは“前提”を渡すほど、<span class="accent">かしこく動く。</span></div>
+      <div class="cards">
+        <div class="card">
+          <div class="tag">残す</div>
+          <h3>フォルダを意識</h3>
+          <p>作業の経過をファイルに残し、次のセッションや人へ引き継ぐ。</p>
+        </div>
+        <div class="card">
+          <div class="tag">履歴</div>
+          <h3>git の概念</h3>
+          <p>変更の履歴・バージョンを残す。「いつでも前に戻せる」。</p>
+        </div>
+        <div class="card">
+          <div class="tag">共有</div>
+          <h3>GitHub</h3>
+          <p>どこからでも参照。デバイスや人をまたいで共有できる。</p>
+        </div>
+      </div>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>Claude はセッションをまたいで記憶を持たない。だから経緯を <code>.md</code> でフォルダに残し、git で履歴化、GitHub で共有——「このファイル読んで」の一言で文脈を渡せる。実際、下書き管理は Notion から GitHub に移した。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12b-2. よく出てくる言葉（用語集） -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">使いこなしのコツ · 用語</div>
+      <h2>よく出てくる<span class="accent">言葉</span></h2>
+      <div class="ui-table">
+        <div class="ui-row">
+          <div class="name">呪文</div>
+          <div class="desc">覚えて使い回す、決まり文句のコマンドやプロンプト。<span class="best">長いコマンドをショートカット登録して一発で出す、あの感覚。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">commit<span>コミット</span></div>
+          <div class="desc">変更を「ここまで」と1区切りで記録すること。<span class="best">メッセージ付きのセーブポイント。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">push<span>プッシュ</span></div>
+          <div class="desc">手元の記録（コミット）を GitHub（クラウド）に送ること。<span class="best">commit＝手元に保存／push＝みんなが見える場所へ。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">compact<span>コンパクト</span></div>
+          <div class="desc">会話が長くなったとき、AI がそれまでを要約して圧縮し、続きを話せるようにする仕組み。<span class="best">コンテキスト上限への対策。</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12c. 使いこなしのコツ ② 指示・ループ -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">使いこなしのコツ · 考え方 ②</div>
+      <h2>プロンプト <span class="accent">→ ループ設計へ</span></h2>
+      <div class="outcome">“うまく頼む”から、<span class="accent">“うまく回す”へ。</span></div>
+      <p style="font-size:1.05rem;color:var(--taupe);margin-bottom:.2rem">期待する振る舞いやアウトプットは、まずプロンプト（指示）で伝える。ただ最近は“一発のプロンプト”より、AI に<b style="color:var(--ink)">試す→確認→直す</b>を繰り返させる「ループの設計」へ、ステージが移ってきている。</p>
+      <div class="flow">
+        <span class="step">試す</span><span class="arrow">→</span>
+        <span class="step">確認</span><span class="arrow">→</span>
+        <span class="step">直す</span><span class="arrow">↻</span>
+        <span class="step">くり返す</span>
+      </div>
+      <p class="kicker-line">指示は“ゴール”を渡すだけ。あとは AI が回して近づける。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>いわゆる<b>エージェントループ</b>。実行→出力を<b>フィードバック</b>（テスト・エラー・レビュー）で受け、AI 自身が直して再実行する。プロンプト職人芸から、良し悪しを測る<b>評価（eval）</b>とループ設計へ重心が移りつつある。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. 最初の一歩 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">まとめ · あなたへ</div>
+      <h2>エンジニアじゃなくても、<span class="accent">今日からできる</span></h2>
+      <div class="step-num">
+        <div class="row"><div class="n">1</div><div class="t"><b>ブラウザで claude.ai を開く</b><small>アプリを入れなくていい。開くだけ。</small></div></div>
+        <div class="row"><div class="n">2</div><div class="t"><b>話しかける</b><small>むずかしい言葉はいらない。「〜したい」でいい。</small></div></div>
+        <div class="row"><div class="n">3</div><div class="t"><b>ファイルを渡す</b><small>PDF・Excel・画像…そのまま放り込んで「これ読んで」。</small></div></div>
+      </div>
+      <p class="kicker-line">コツ：完璧な指示より、まず投げて、会話で直す。</p>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>デスクトップアプリ（Cowork）なら自分のフォルダを直接触れる。まずは“捨てて良いファイル”で試すのが安全。</p>
+      </div>
+      <div class="referral">
+        <img class="ref-qr" width="200" height="200" alt="Claude招待リンクのQRコード（https://claude.ai/referral/Vbatd4JYJQ）" src="data:image/png;base64,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" />
+        <div class="ref-txt">
+          <a class="ref-btn" href="https://claude.ai/referral/Vbatd4JYJQ" target="_blank" rel="noopener">Claudeを始める（招待リンク）</a>
+          <span class="ref-url">https://claude.ai/referral/Vbatd4JYJQ</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. 開発者向け 1 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">⚙️ 開発者向け · ①</div>
+      <h2>触りどころ：<span class="accent">CLI と デスクトップ</span></h2>
+      <div class="ui-table" style="margin-top:.6rem">
+        <div class="ui-row">
+          <div class="name">Claude Code<span>CLI</span></div>
+          <div class="desc">ターミナルで実装・デバッグを任せる。<span class="best">エラーが文字で返る＝原因を追える。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">Cowork / Dispatch<span>デスクトップ</span></div>
+          <div class="desc">ファイル操作、スマホから母艦にタスクを投げる。<span class="best">「やる」が「確認する」に変わる。</span></div>
+        </div>
+        <div class="ui-row">
+          <div class="name">Cursor<span>エディタ統合</span></div>
+          <div class="desc">プレビューを見ながらフロント実装。<span class="best">対話型UIの気持ちよさ。</span></div>
+        </div>
+      </div>
+      <p class="kicker-line">体験談：GUIの力技より、CLI/APIの方が壊れにくい。</p>
+    </div>
+  </section>
+
+  <!-- 15. 開発者向け 2 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">⚙️ 開発者向け · ②</div>
+      <h2>API / MCP / Skills</h2>
+      <div class="cards" style="margin-top:1rem">
+        <div class="card">
+          <div class="tag">API</div>
+          <h3>直接呼ぶ</h3>
+          <p>アプリからモデルを呼ぶ。PDF抽出・店名抽出・Vision…今日の事例は全部これ。</p>
+        </div>
+        <div class="card">
+          <div class="tag">MCP</div>
+          <h3>ツールに繋ぐ</h3>
+          <p>AIを外部ツール／データに繋ぐ共通規格。SaaS連携の標準になりつつある。</p>
+        </div>
+        <div class="card">
+          <div class="tag">Skills</div>
+          <h3>やり方を教える</h3>
+          <p>“業務のやり方”を Claude に教える再利用パーツ。毎回の説明が不要に。</p>
+        </div>
+      </div>
+      <p class="kicker-line">まず1つ：手元の面倒な処理を、APIで1本だけ自動化してみる。</p>
+    </div>
+  </section>
+
+  <!-- 16. Closing -->
+  <section class="slide divider">
+    <div class="inner">
+      <div class="eyebrow">おわりに</div>
+      <h1>「作る」のハードルは、<br>もう下がってる。</h1>
+      <div class="lead">コードが書けなくても、<b style="color:var(--cream)">任せて・確認するだけ</b>で形になる。まずは claude.ai に、今日の“面倒”をひとつ投げてみる。</div>
+      <div class="byline" style="color:#B8B2A8;margin-top:2.2rem">ありがとうございました　｜　質問、どうぞ 🍺</div>
+      <div class="referral">
+        <img class="ref-qr" width="200" height="200" alt="Claude招待リンクのQRコード（https://claude.ai/referral/Vbatd4JYJQ）" src="data:image/png;base64,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" />
+        <div class="ref-txt">
+          <a class="ref-btn" href="https://claude.ai/referral/Vbatd4JYJQ" target="_blank" rel="noopener">Claudeを始める（招待リンク）</a>
+          <span class="ref-url">https://claude.ai/referral/Vbatd4JYJQ</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<div id="hint">タップまたはスワイプでめくる</div>
+<div id="nav">
+  <button class="navbtn" id="prev" aria-label="前のスライド" type="button" onclick="prev()">‹</button>
+  <span id="counter"><span class="cur">01</span> / <span id="total">19</span></span>
+  <button class="navbtn" id="next" aria-label="次のスライド" type="button" onclick="next()">›</button>
+</div>
+
+<script>
+  // ---- dead-simple slide engine ----
+  // Mark that JS is running: enables the entrance animation. Without JS
+  // (e.g. iOS Files / Quick Look), the statically-active slide 1 stays fully visible.
+  document.body.classList.add('js');
+
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length;
+  // start on whichever slide is statically marked active (slide 1), else 0
+  var cur = 0;
+  for(var _i = 0; _i < slides.length; _i++){ if(slides[_i].classList.contains('active')){ cur = _i; break; } }
+
+  function pad(n){ return String(n+1).padStart(2,'0'); }
+
+  function show(i){
+    if(total === 0) return;
+    if(i < 0) i = 0;
+    if(i > total - 1) i = total - 1;
+    for(var s = 0; s < total; s++){ slides[s].classList.remove('active'); }
+    slides[i].classList.add('active');
+    cur = i;
+    try { slides[i].scrollTop = 0; window.scrollTo(0,0); } catch(e){}
+
+    var counter = document.querySelector('#counter .cur');
+    if(counter) counter.textContent = pad(cur);
+    var progress = document.getElementById('progress');
+    if(progress) progress.style.width = (total > 1 ? (cur/(total-1)*100) : 100) + '%';
+    var prevBtn = document.getElementById('prev');
+    var nextBtn = document.getElementById('next');
+    if(prevBtn) prevBtn.disabled = (cur === 0);
+    if(nextBtn) nextBtn.disabled = (cur === total - 1);
+    document.body.classList.toggle('on-dark', slides[cur].classList.contains('divider'));
+  }
+
+  // global so inline onclick="next()" / onclick="prev()" resolve
+  function next(){ show(cur + 1); }
+  function prev(){ show(cur - 1); }
+  window.next = next;
+  window.prev = prev;
+  window.goTo = show;
+
+  // keyboard (desktop)
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight' || e.key==='PageDown' || e.key===' '){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft' || e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ e.preventDefault(); show(0); }
+    else if(e.key==='End'){ e.preventDefault(); show(total-1); }
+  });
+
+  // minimal swipe — compare X on touchend, no preventDefault, no overlay
+  var startX = 0, startY = 0;
+  document.addEventListener('touchstart', function(e){
+    startX = e.changedTouches[0].clientX;
+    startY = e.changedTouches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0){ next(); } else { prev(); }
+    }
+  }, {passive:true});
+
+  // total counter + init
+  var totalEl = document.getElementById('total');
+  if(totalEl) totalEl.textContent = String(total).padStart(2,'0');
+  show(0);
+
+  // fade the hint after a few seconds
+  setTimeout(function(){ var h = document.getElementById('hint'); if(h) h.style.opacity = '0'; }, 4500);
+</script>
+</body>
+</html>

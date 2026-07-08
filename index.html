@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>資料 / Presentations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#FAF9F5;
+    --cream2:#F0EEE6;
+    --panel:#FFFFFF;
+    --clay:#CC785C;
+    --clay-bright:#D97757;
+    --clay-soft:#F3E3DA;
+    --ink:#1F1E1D;
+    --taupe:#6B6660;
+    --taupe-light:#8C867E;
+    --line:#E6E1D6;
+    --line-strong:#D8D2C4;
+    --shadow:0 1px 3px rgba(31,30,29,.05), 0 8px 30px rgba(31,30,29,.06);
+    --fs-jp:"Noto Sans JP","Inter",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:var(--fs-jp);
+    background:var(--cream);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    line-height:1.6;
+    min-height:100vh;
+    padding:8vh 6vw 12vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;}
+
+  header{margin-bottom:2.8rem;}
+  .eyebrow{
+    font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--clay);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--clay);display:inline-block;}
+  h1{font-size:clamp(2rem,5.4vw,3.2rem);font-weight:800;line-height:1.12;letter-spacing:-.01em;}
+  h1 .accent{color:var(--clay);}
+  .subtitle{font-size:clamp(1rem,1.9vw,1.2rem);color:var(--taupe);font-weight:500;margin-top:.9rem;max-width:48ch;}
+
+  /* deck list */
+  .decks{display:flex;flex-direction:column;gap:1.1rem;}
+
+  /* ===== repeatable deck card — copy one .deck-card block to add a talk ===== */
+  a.deck-card{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:1.5rem 1.6rem;box-shadow:var(--shadow);
+    transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  a.deck-card:hover{transform:translateY(-2px);border-color:var(--clay-soft);box-shadow:0 4px 10px rgba(31,30,29,.06),0 14px 40px rgba(204,120,92,.14);}
+  a.deck-card:active{transform:translateY(0);}
+  .deck-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+  .deck-card h2{font-size:clamp(1.25rem,2.6vw,1.6rem);font-weight:800;letter-spacing:-.01em;}
+  .date{font-size:.82rem;font-weight:700;color:var(--clay);background:var(--clay-soft);border-radius:999px;padding:.28rem .8rem;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .deck-card p{font-size:.98rem;color:var(--taupe);margin-top:.55rem;}
+  .go{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.1rem;font-weight:700;color:var(--clay);font-size:.95rem;}
+  .go .arrow{transition:transform .14s ease;}
+  a.deck-card:hover .go .arrow{transform:translateX(4px);}
+  /* ======================================================================= */
+
+  footer{margin-top:3rem;font-size:.85rem;color:var(--taupe-light);}
+
+  @media (max-width:560px){
+    body{padding:6vh 6vw 10vh;}
+    a.deck-card{padding:1.25rem 1.3rem;border-radius:16px;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Slides</div>
+      <h1>資料 <span class="accent">/ Presentations</span></h1>
+      <p class="subtitle">勉強会や発表で使ったスライドを置いておく場所。</p>
+    </header>
+
+    <main class="decks">
+
+      <!-- ==== DECK CARD ==== copy this whole <a> block to add a new talk ====
+        - href : ./your-deck.html  (relative link to the html file in this folder)
+        - h2   : deck title
+        - date : YYYY-MM
+        - p    : one-line description
+      ==================================================================== -->
+      <a class="deck-card" href="./claude-study.html">
+        <div class="deck-top">
+          <h2>Claude ミニ勉強会</h2>
+          <span class="date">2026-07</span>
+        </div>
+        <p>Claude の使い方を、ビール事業の実例で紹介。</p>
+        <span class="go">開く <span class="arrow">→</span></span>
+      </a>
+
+      <!-- To add another deck, paste a copy of the <a class="deck-card"> … </a> block above and edit href / h2 / date / p. -->
+
+    </main>
+
+    <footer>© mediiiiium</footer>
+  </div>
+</body>
+</html>
