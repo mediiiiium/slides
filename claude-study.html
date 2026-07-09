@@ -158,23 +158,6 @@
   }
   .byline{margin-top:2.4rem;color:var(--taupe);font-weight:500;font-size:.98rem;}
 
-  /* action slide — phase shift: warm clay background */
-  .action{background:linear-gradient(160deg,#D97757 0%,#C0684D 100%);}
-  .action .eyebrow{color:#F6E2D8;}
-  .action .eyebrow::before{background:#F6E2D8;}
-  .action h2{color:#FFF6F1;}
-  .action h2 .accent{color:#FFFFFF;}
-  .action .lead{color:#FCE9E0;}
-  .action .step-num .n{background:var(--cream);color:var(--clay);box-shadow:0 2px 8px rgba(0,0,0,.18);}
-  .action .step-num .row .t{color:#FFF6F1;}
-  .action .step-num .row .t small{color:#F6DBCF;}
-  .action .kicker-line{color:#FFFFFF;}
-  .action .step-num .row .t code,
-  .action .kicker-line code{
-    font-family:"Inter",ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:rgba(255,255,255,.20);color:#fff;padding:.05rem .38rem;border-radius:5px;font-size:.85em;
-  }
-
   /* divider slide */
   .divider{background:var(--ink);}
   .divider .eyebrow{color:var(--clay-bright);}
@@ -393,6 +376,28 @@
     </div>
   </section>
 
+  <!-- 5-2. なぜ卒業？ チャット vs ファイル（before/after） -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">なぜ卒業？ · チャット vs ファイル</div>
+      <h2>チャットは<span class="accent">毎回リセット</span>、ファイルは<span class="accent">積み上がる</span></h2>
+      <div class="lead" style="margin-top:.5rem">同じAIでも、成果を“どこに置くか”で伸び方がまるで違う。</div>
+      <div class="cards" style="grid-template-columns:1fr 1fr;margin-top:1.1rem">
+        <div class="card">
+          <div class="tag">Before · チャットだけ</div>
+          <h3>毎回ふりだし</h3>
+          <p>会話を閉じると文脈は消える。次はまた一から説明。成果は“流れて”いって、手元には何も残らない。</p>
+        </div>
+        <div class="card">
+          <div class="tag">After · ファイルを持つ</div>
+          <h3>昨日の続きから</h3>
+          <p>決めたこと・作ったものがフォルダに残る。「このファイル読んで」で再開でき、日々の作業が“資産”になっていく。</p>
+        </div>
+      </div>
+      <p class="kicker-line">卒業とは——成果をチャットの履歴から、<b>自分のフォルダ</b>へ移すこと。</p>
+    </div>
+  </section>
+
   <!-- 5a. おすすめの入り口（ターミナル / デスクトップ） -->
   <section class="slide">
     <div class="inner">
@@ -408,10 +413,10 @@
         <div>
           <img src="./assets/desktop-app.png" alt="Claude デスクトップアプリのホーム画面" style="width:100%;height:clamp(220px,34vh,360px);object-fit:cover;object-position:top center;border-radius:12px;border:1px solid var(--line-strong);box-shadow:var(--shadow);display:block;" />
           <h3 style="font-size:1.18rem;font-weight:800;margin:.85rem 0 .3rem;">デスクトップアプリ <span style="color:var(--taupe);font-weight:600;font-size:.85rem;">全部入り</span></h3>
-          <p style="color:var(--taupe);font-size:.98rem;line-height:1.55;">チャットだけでなく、Code・Design・Dispatch まで全部入り。ひとつの画面で切り替えて使える。</p>
+          <p style="color:var(--taupe);font-size:.98rem;line-height:1.55;">チャットだけでなく、Code・Design・Dispatch まで全部入り。<b style="color:var(--ink)">まず開くべきは Code タブ</b>——ファイルを触るのはここ。</p>
         </div>
       </div>
-      <p class="kicker-line">中身はどちらも同じ Claude。手になじむ方から始めればいい。</p>
+      <p class="kicker-line">迷ったら、まずデスクトップアプリ。ただし本命は、その中の <code>Code</code> でファイルを触ること——ここがチャット卒業の一手。</p>
       <div class="tech">
         <div class="label">⚙️ 技術メモ</div>
         <p>入り口は違っても、動かしているのは同じ Claude。Cowork／Code は手元のファイルやCLIを、Design はブラウザ上のキャンバスを扱う。Windows でデスクトップアプリの Code を初めて開くときは <code>Git for Windows</code> が必要（入れて再起動）。</p>
@@ -531,7 +536,7 @@
     <div class="inner">
       <div class="eyebrow">アウトプット例</div>
       <h1>作ってみた。<br>非エンジニアの現場から。</h1>
-      <div class="lead">ここまでのコツ（文脈を残す・区切る・ループで回す）が、こう形になる。コードの書けない裏方が、<b style="color:var(--cream)">失敗しながら、全部ひとりで</b>——やらかしの数だけ、身についた。</div>
+      <div class="lead">業務の自動化から、<b style="color:var(--cream)">子どもの漢字ドリルまで</b>——大きな話ばかりじゃない。ここまでのコツ（文脈を残す・区切る・ループで回す）が、こう形になる。コードの書けない裏方が、<b style="color:var(--cream)">失敗しながら、全部ひとりで</b>。</div>
     </div>
   </section>
 
@@ -673,8 +678,17 @@
     </div>
   </section>
 
+  <!-- 14b. DIVIDER: では、やってみましょう -->
+  <section class="slide divider">
+    <div class="inner">
+      <div class="eyebrow">ここから、あなたの番</div>
+      <h1>では、実際に<br>やってみましょう。</h1>
+      <div class="lead">読むのはここまで。あとは<b style="color:var(--cream)">手を動かすだけ</b>——次の一手を、いっしょに。</div>
+    </div>
+  </section>
+
   <!-- 15. 最初のアクション -->
-  <section class="slide action">
+  <section class="slide">
     <div class="inner">
       <div class="eyebrow">まとめ · 最初のアクション</div>
       <h2>今日からの、<span class="accent">最初の一手</span></h2>
@@ -694,7 +708,7 @@
     <div class="inner">
       <div class="eyebrow">おわりに</div>
       <h1>「作る」のハードルは、<br>もう下がってる。</h1>
-      <div class="lead">コードが書けなくても、<b style="color:var(--cream)">任せて・確認するだけ</b>で形になる。まずは claude.ai に、今日の“面倒”をひとつ投げてみる。</div>
+      <div class="lead">コードが書けなくても、<b style="color:var(--cream)">任せて・確認するだけ</b>で形になる。チャットで眺める側から卒業して、<b style="color:var(--cream)">デスクトップアプリを開き、さっきの4ステップを今日ひとつ</b>やってみる。</div>
       <p style="margin-top:1.3rem;font-size:clamp(1.05rem,2.1vw,1.4rem);font-weight:800;color:var(--clay-bright);line-height:1.35;">AIを使いこなす力は、これからの“教養”。そして、自分を少し“自由”にする技。</p>
       <div class="byline" style="color:#B8B2A8;margin-top:2.2rem">ありがとうございました　｜　質問、どうぞ 🍺</div>
       <div class="referral">
@@ -703,6 +717,8 @@
           <a class="ref-btn" href="https://claude.ai/referral/Vbatd4JYJQ" target="_blank" rel="noopener">Claudeを始める（招待リンク）</a>
           <span class="ref-url">https://claude.ai/referral/Vbatd4JYJQ</span>
           <span style="font-size:.82rem;color:#B8B2A8;font-weight:600;">※ 招待枠には数に限りがあります（先着順・埋まり次第終了）。</span>
+          <span style="font-size:.92rem;color:var(--cream);font-weight:700;margin-top:.5rem;">▶ マストの道具＝デスクトップアプリ（Code入り）</span>
+          <span class="ref-url" style="color:var(--clay-bright)">claude.ai/download</span>
         </div>
       </div>
 
@@ -714,7 +730,7 @@
 <div id="hint">タップまたはスワイプでめくる</div>
 <div id="nav">
   <button class="navbtn" id="prev" aria-label="前のスライド" type="button" onclick="prev()">‹</button>
-  <span id="counter"><span class="cur">01</span> / <span id="total">20</span></span>
+  <span id="counter"><span class="cur">01</span> / <span id="total">22</span></span>
   <button class="navbtn" id="next" aria-label="次のスライド" type="button" onclick="next()">›</button>
 </div>
 
