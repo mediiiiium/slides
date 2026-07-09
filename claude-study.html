@@ -532,33 +532,10 @@
     </div>
   </section>
 
-  <!-- 9. BrewDrop -->
+  <!-- 9. Now on Tap -->
   <section class="slide">
     <div class="inner">
-      <div class="eyebrow">CASE 03 · BrewDrop</div>
-      <div class="outcome">埋もれてた新作ビールを、<span class="accent">自動で1か所に集約。</span></div>
-      <p style="font-size:1.02rem;color:var(--taupe);margin-bottom:.6rem">新作リリース情報が飲食店にどさどさ届く → 追いきれない → 結局“有名どころ”しか発注されない。小さいブルワリーが埋もれる問題。</p>
-      <div class="flow">
-        <span class="step">専用メアドにPDFが届く</span><span class="arrow">→</span>
-        <span class="step">AIが中身を読み取り</span><span class="arrow">→</span>
-        <span class="step">スプレッドシート</span><span class="arrow">→</span>
-        <span class="step">サイトに掲載</span>
-      </div>
-      <ul class="clean">
-        <li>ブルワリーごとに<b>バラバラなPDF</b>でも、銘柄・スタイル・ABV・IBUをちゃんと拾う。</li>
-        <li>ブルワリー側は「いつも通りメールを送るだけ」。Webはほぼ自動更新。</li>
-      </ul>
-      <div class="tech">
-        <div class="label">⚙️ 技術メモ</div>
-        <p>Cloudflare Mail Routing → GASでDrive保存 → <code>Claude API</code> でPDF抽出 → スプシをDBにしてWeb表示。新しく作ったものはほぼ無く、既存ツールの組み合わせだけで動いた。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10. Now on Tap -->
-  <section class="slide">
-    <div class="inner">
-      <div class="eyebrow">CASE 04 · Now on Tap</div>
+      <div class="eyebrow">CASE 03 · Now on Tap</div>
       <div class="outcome">「今このバーで何が飲めるか」を、<span class="accent">歩く前に。</span></div>
       <p style="font-size:1.02rem;color:var(--taupe);margin-bottom:.6rem">店のInstagramを毎回見るのが面倒 → ロボットに毎朝見回らせて、東京のビールDBにする。コンセプトは <b>Walk in knowing.</b></p>
       <div class="flow">
@@ -676,7 +653,7 @@
 <div id="hint">タップまたはスワイプでめくる</div>
 <div id="nav">
   <button class="navbtn" id="prev" aria-label="前のスライド" type="button" onclick="prev()">‹</button>
-  <span id="counter"><span class="cur">01</span> / <span id="total">20</span></span>
+  <span id="counter"><span class="cur">01</span> / <span id="total">19</span></span>
   <button class="navbtn" id="next" aria-label="次のスライド" type="button" onclick="next()">›</button>
 </div>
 
