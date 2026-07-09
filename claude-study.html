@@ -158,6 +158,23 @@
   }
   .byline{margin-top:2.4rem;color:var(--taupe);font-weight:500;font-size:.98rem;}
 
+  /* action slide — phase shift: warm clay background */
+  .action{background:linear-gradient(160deg,#D97757 0%,#C0684D 100%);}
+  .action .eyebrow{color:#F6E2D8;}
+  .action .eyebrow::before{background:#F6E2D8;}
+  .action h2{color:#FFF6F1;}
+  .action h2 .accent{color:#FFFFFF;}
+  .action .lead{color:#FCE9E0;}
+  .action .step-num .n{background:var(--cream);color:var(--clay);box-shadow:0 2px 8px rgba(0,0,0,.18);}
+  .action .step-num .row .t{color:#FFF6F1;}
+  .action .step-num .row .t small{color:#F6DBCF;}
+  .action .kicker-line{color:#FFFFFF;}
+  .action .step-num .row .t code,
+  .action .kicker-line code{
+    font-family:"Inter",ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:rgba(255,255,255,.20);color:#fff;padding:.05rem .38rem;border-radius:5px;font-size:.85em;
+  }
+
   /* divider slide */
   .divider{background:var(--ink);}
   .divider .eyebrow{color:var(--clay-bright);}
@@ -456,6 +473,38 @@
     </div>
   </section>
 
+  <!-- 5c-2. 補足: git / GitHub とは -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">補足 · 用語</div>
+      <h2><span class="accent">git</span> と <span class="accent">GitHub</span>、ざっくり</h2>
+      <div class="lead" style="margin-top:.4rem">名前がこわいだけ。やっていることは、とてもシンプル。</div>
+      <div class="cards" style="grid-template-columns:1fr 1fr;margin-top:1rem">
+        <div class="card">
+          <div class="tag">手元 · 履歴</div>
+          <h3>git</h3>
+          <p>ファイルの変更を“セーブ”しておく仕組み。区切りのいいところで記録（commit）すれば、<b>いつでも前の状態に戻せる</b>。ゲームのセーブポイントに近い。</p>
+        </div>
+        <div class="card">
+          <div class="tag">クラウド · 共有</div>
+          <h3>GitHub</h3>
+          <p>git の記録を<b>クラウドに置いておく場所</b>。上げておけば（push）別のPCからでも続けられて、バックアップにも、人との共有にもなる。</p>
+        </div>
+      </div>
+      <div class="flow" style="margin-top:1.2rem">
+        <span class="step">ファイルを編集</span>
+        <span class="arrow">→</span>
+        <span class="step">commit（手元に記録）</span>
+        <span class="arrow">→</span>
+        <span class="step">push（GitHubへ）</span>
+      </div>
+      <div class="tech">
+        <div class="label">⚙️ 技術メモ</div>
+        <p>実際の操作は Claude（Code）に任せられる——「ここまでコミットして」「GitHub に上げて」で通じる。仕組みを完璧に覚えなくても、まず使い始めて大丈夫。</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 5d. 使いこなしのコツ ② 指示・ループ -->
   <section class="slide">
     <div class="inner">
@@ -625,7 +674,7 @@
   </section>
 
   <!-- 15. 最初のアクション -->
-  <section class="slide">
+  <section class="slide action">
     <div class="inner">
       <div class="eyebrow">まとめ · 最初のアクション</div>
       <h2>今日からの、<span class="accent">最初の一手</span></h2>
@@ -665,7 +714,7 @@
 <div id="hint">タップまたはスワイプでめくる</div>
 <div id="nav">
   <button class="navbtn" id="prev" aria-label="前のスライド" type="button" onclick="prev()">‹</button>
-  <span id="counter"><span class="cur">01</span> / <span id="total">19</span></span>
+  <span id="counter"><span class="cur">01</span> / <span id="total">20</span></span>
   <button class="navbtn" id="next" aria-label="次のスライド" type="button" onclick="next()">›</button>
 </div>
 
