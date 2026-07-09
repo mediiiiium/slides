@@ -364,7 +364,7 @@
         </div>
         <div class="ui-row">
           <div class="name">Code<span>Claude Code</span></div>
-          <div class="desc">ターミナルで動く開発向け。<span class="best">コードをがっつり書く／直す。</span></div>
+          <div class="desc">自分のフォルダを触って形にする“作業場”。ターミナルでも、デスクトップアプリの中でも、動くのは同じもの。<span class="best">非エンジニアはアプリから入ればOK。ここが“卒業”の本丸。</span></div>
         </div>
         <div class="ui-row">
           <div class="name">Design<span>Claude Design</span></div>
@@ -402,21 +402,21 @@
   <section class="slide">
     <div class="inner">
       <div class="eyebrow">はじめに · おすすめの入り口</div>
-      <h2>始めるなら、この<span class="accent">どちらか</span></h2>
-      <div class="lead" style="margin-top:.5rem">迷ったら、ターミナルの Claude Code か、デスクトップアプリ。このどちらかで動かすのがおすすめ。</div>
+      <h2>迷ったら、まず<span class="accent">デスクトップアプリ</span></h2>
+      <div class="lead" style="margin-top:.5rem">全部入りのデスクトップアプリから入るのがおすすめ。中の <b style="color:var(--ink)">Code タブ</b>で、自分のフォルダを触れる。ターミナルの Claude Code は、慣れてきたら。</div>
       <div class="two-col" style="margin-top:1.2rem">
         <div>
           <img src="./assets/claude-code.png" alt="ターミナルで動く Claude Code の画面" style="width:100%;height:clamp(220px,34vh,360px);object-fit:cover;object-position:top center;border-radius:12px;border:1px solid var(--line-strong);box-shadow:var(--shadow);display:block;" />
-          <h3 style="font-size:1.18rem;font-weight:800;margin:.85rem 0 .3rem;">Claude Code <span style="color:var(--taupe);font-weight:600;font-size:.85rem;">ターミナル</span></h3>
-          <p style="color:var(--taupe);font-size:.98rem;line-height:1.55;">軽量にサクサク、パワフルに動かす。コマンドで開発・自動化をがっつり回したいならこれ。</p>
+          <h3 style="font-size:1.18rem;font-weight:800;margin:.85rem 0 .3rem;">Claude Code <span style="color:var(--taupe);font-weight:600;font-size:.85rem;">慣れたら</span></h3>
+          <p style="color:var(--taupe);font-size:.98rem;line-height:1.55;">軽量にサクサク、パワフルに動かす。慣れてきたら、コマンドで開発・自動化をがっつり回せる。動くのはアプリの Code と同じもの。</p>
         </div>
         <div>
           <img src="./assets/desktop-app.png" alt="Claude デスクトップアプリのホーム画面" style="width:100%;height:clamp(220px,34vh,360px);object-fit:cover;object-position:top center;border-radius:12px;border:1px solid var(--line-strong);box-shadow:var(--shadow);display:block;" />
-          <h3 style="font-size:1.18rem;font-weight:800;margin:.85rem 0 .3rem;">デスクトップアプリ <span style="color:var(--taupe);font-weight:600;font-size:.85rem;">全部入り</span></h3>
+          <h3 style="font-size:1.18rem;font-weight:800;margin:.85rem 0 .3rem;">デスクトップアプリ <span style="color:var(--clay);font-weight:700;font-size:.85rem;">まずこっち</span></h3>
           <p style="color:var(--taupe);font-size:.98rem;line-height:1.55;">チャットだけでなく、Code・Design・Dispatch まで全部入り。<b style="color:var(--ink)">まず開くべきは Code タブ</b>——ファイルを触るのはここ。</p>
         </div>
       </div>
-      <p class="kicker-line">迷ったら、まずデスクトップアプリ。ただし本命は、その中の <code>Code</code> でファイルを触ること——ここがチャット卒業の一手。</p>
+      <p class="kicker-line">本命は、その中の <code>Code</code> でファイルを触ること——ここがチャット卒業の一手。</p>
       <div class="tech">
         <div class="label">⚙️ 技術メモ</div>
         <p>入り口は違っても、動かしているのは同じ Claude。Cowork／Code は手元のファイルやCLIを、Design はブラウザ上のキャンバスを扱う。Windows でデスクトップアプリの Code を初めて開くときは <code>Git for Windows</code> が必要（入れて再起動）。</p>
@@ -424,88 +424,33 @@
     </div>
   </section>
 
-  <!-- 5b. 使いこなしのコツ ① 文脈 -->
+  <!-- 5b. 文脈は、ファイルに残す（旧 文脈①＋引き継ぎ＋git/GitHub を統合） -->
   <section class="slide">
     <div class="inner">
-      <div class="eyebrow">使いこなしのコツ · 考え方 ①</div>
-      <h2>文脈を持たせると、<span class="accent">AIは賢くなる</span></h2>
-      <div class="outcome">AIは“前提”を渡すほど、<span class="accent">かしこく動く。</span></div>
-      <div class="cards">
+      <div class="eyebrow">使いこなしのコツ · 文脈の残し方</div>
+      <h2>文脈は、<span class="accent">ファイルに残す</span></h2>
+      <div class="lead" style="margin-top:.5rem">AIは前回の会話を覚えていない。だから経緯をファイルに残して渡す。名前は少しこわいだけで、やることはシンプル。</div>
+      <div class="cards" style="margin-top:1.1rem">
         <div class="card">
           <div class="tag">残す</div>
-          <h3>フォルダを意識</h3>
-          <p>作業の経過をファイルに残し、次のセッションや人へ引き継ぐ。</p>
+          <h3>フォルダに残す</h3>
+          <p>作業の経過を <code>.md</code> でフォルダに。次のセッションや人へ、そのまま引き継げる。</p>
         </div>
         <div class="card">
-          <div class="tag">履歴</div>
-          <h3>git の概念</h3>
-          <p>変更の履歴・バージョンを残す。「いつでも前に戻せる」。</p>
+          <div class="tag">履歴 · commit</div>
+          <h3>git＝セーブ点</h3>
+          <p>区切りのいいところで記録すれば、<b>いつでも前の状態に戻せる</b>。ゲームのセーブポイント。</p>
         </div>
         <div class="card">
-          <div class="tag">共有</div>
-          <h3>GitHub</h3>
-          <p>どこからでも参照。デバイスや人をまたいで共有できる。</p>
-        </div>
-      </div>
-      <div class="tech">
-        <div class="label">⚙️ 技術メモ</div>
-        <p>Claude はセッションをまたいで記憶を持たない。だから経緯を <code>.md</code> でフォルダに残し、git で履歴化、GitHub で共有——「このファイル読んで」の一言で文脈を渡せる。実際、下書き管理は Notion から GitHub に移した。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5c. 文脈を正しく引き継ぐTips -->
-  <section class="slide">
-    <div class="inner">
-      <div class="eyebrow">使いこなしのコツ · 文脈の引き継ぎ</div>
-      <h2>文脈を<span class="accent">正しく引き継ぐ</span></h2>
-      <div class="lead" style="margin-top:.5rem">AIは前回の会話を覚えていない。だから「どこまで・何を」を残して渡すのがコツ。</div>
-      <div class="ui-table" style="margin-top:1rem">
-        <div class="ui-row">
-          <div class="name">commit<span>区切る</span></div>
-          <div class="desc">キリのいいところで記録し、「ここまで出来た」という節目を作る。<span class="best">あとから経緯を辿り直せる。</span></div>
-        </div>
-        <div class="ui-row">
-          <div class="name">push<span>共有する</span></div>
-          <div class="desc">手元の記録をクラウド（GitHub）へ上げる。<span class="best">別のPC・別セッション・人へ、同じ文脈を渡せる。</span></div>
-        </div>
-        <div class="ui-row">
-          <div class="name">compact<span>畳んで続ける</span></div>
-          <div class="desc">会話が長くなったら、それまでを要約して圧縮する。<span class="best">話の筋を保ったまま続けられる。</span></div>
+          <div class="tag">共有 · push</div>
+          <h3>GitHub＝クラウド</h3>
+          <p>git の記録をクラウドへ。上げておけば<b>別のPC・人と共有</b>でき、バックアップにもなる。</p>
         </div>
       </div>
       <p class="kicker-line">迷ったら「このファイル読んで」。<code>.md</code> 一枚で、前提を丸ごと渡せる。</p>
-    </div>
-  </section>
-
-  <!-- 5c-2. 補足: git / GitHub とは -->
-  <section class="slide">
-    <div class="inner">
-      <div class="eyebrow">補足 · 用語</div>
-      <h2><span class="accent">git</span> と <span class="accent">GitHub</span>、ざっくり</h2>
-      <div class="lead" style="margin-top:.4rem">名前がこわいだけ。やっていることは、とてもシンプル。</div>
-      <div class="cards" style="grid-template-columns:1fr 1fr;margin-top:1rem">
-        <div class="card">
-          <div class="tag">手元 · 履歴</div>
-          <h3>git</h3>
-          <p>ファイルの変更を“セーブ”しておく仕組み。区切りのいいところで記録（commit）すれば、<b>いつでも前の状態に戻せる</b>。ゲームのセーブポイントに近い。</p>
-        </div>
-        <div class="card">
-          <div class="tag">クラウド · 共有</div>
-          <h3>GitHub</h3>
-          <p>git の記録を<b>クラウドに置いておく場所</b>。上げておけば（push）別のPCからでも続けられて、バックアップにも、人との共有にもなる。</p>
-        </div>
-      </div>
-      <div class="flow" style="margin-top:1.2rem">
-        <span class="step">ファイルを編集</span>
-        <span class="arrow">→</span>
-        <span class="step">commit（手元に記録）</span>
-        <span class="arrow">→</span>
-        <span class="step">push（GitHubへ）</span>
-      </div>
       <div class="tech">
         <div class="label">⚙️ 技術メモ</div>
-        <p>実際の操作は Claude（Code）に任せられる——「ここまでコミットして」「GitHub に上げて」で通じる。仕組みを完璧に覚えなくても、まず使い始めて大丈夫。</p>
+        <p>操作は全部 Claude（Code）に任せられる——「ここまでコミットして」「GitHub に上げて」で通じる。会話が長くなったら <code>compact</code> で畳んで継続。実際、下書き管理は Notion から GitHub に移した。仕組みを完璧に覚えなくてOK。</p>
       </div>
     </div>
   </section>
@@ -730,7 +675,7 @@
 <div id="hint">タップまたはスワイプでめくる</div>
 <div id="nav">
   <button class="navbtn" id="prev" aria-label="前のスライド" type="button" onclick="prev()">‹</button>
-  <span id="counter"><span class="cur">01</span> / <span id="total">22</span></span>
+  <span id="counter"><span class="cur">01</span> / <span id="total">20</span></span>
   <button class="navbtn" id="next" aria-label="次のスライド" type="button" onclick="next()">›</button>
 </div>
 
