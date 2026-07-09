@@ -578,32 +578,22 @@
     </div>
   </section>
 
-  <!-- 11. Others 1 -->
+  <!-- 11. 非エンジニアのOSSへの挑戦（mcp-jp） -->
   <section class="slide">
     <div class="inner">
-      <div class="eyebrow">その他 · こまごま ①</div>
-      <h2>仕事まわりで、ほかにも</h2>
-      <div class="cards" style="margin-top:1.1rem">
-        <div class="card">
-          <div class="tag">SaaS連携</div>
-          <h3>mcp-jp</h3>
-          <p>日本のSaaS（freee・勤怠・採用…）を<b style="color:var(--ink)">MCPでAIに直結</b>。現在34サービス。公式が出ない“空白地帯”を埋める。</p>
-        </div>
-        <div class="card">
-          <div class="tag">ノウハウ</div>
-          <h3>skill-jp</h3>
-          <p>「日本の業務のコツ」を Claude に教える<b style="color:var(--ink)">スキル集</b>。同じ説明を毎回しなくてよくなる。</p>
-        </div>
-        <div class="card">
-          <div class="tag">なんちゃってOSS開発</div>
-          <h3>Vauban</h3>
-          <p>非エンジニアが自作の“開発ツール”を、<b style="color:var(--ink)">OSSっぽく各リポジトリに配って回す</b>話。コードの安全網を自動で展開。</p>
-        </div>
-      </div>
-      <p class="kicker-line">やらかしを自動で止める安全網を、全リポジトリに配って回る。</p>
+      <div class="eyebrow">その他 · OSSへの挑戦</div>
+      <h2>非エンジニアの、<span class="accent">OSSへの挑戦</span></h2>
+      <div class="outcome">日本のSaaSを、AIに<span class="accent">直接つなぐ</span> — <code>mcp-jp</code></div>
+      <p style="font-size:1.05rem;color:var(--taupe);margin-bottom:.5rem"><b style="color:var(--ink)">まず MCP とは</b>：AIを外部のツールやデータに繋ぐための“共通プラグイン規格”。対応させると、AI がそのサービスを直接読み書きできるようになる。</p>
+      <ul class="clean">
+        <li>日本のSaaS（freee・勤怠・採用…）を MCP で AI に直結。<b>現在34サービス</b>。</li>
+        <li>公式コネクタが出ていない“空白地帯”を、非エンジニアが自分で作って埋める。</li>
+        <li>しかも自分用で終わらせず、<b>誰でも使える形で公開</b>——「無ければ作って、みんなに配る」OSSの発想。</li>
+      </ul>
+      <p class="kicker-line">コードは書けなくても、“無ければ作って公開する”側に回れる。</p>
       <div class="tech">
-        <div class="label">⚙️ 技術メモ（Vauban）</div>
-        <p>正体は versioned <code>setup.sh</code>。commit前に detect-secrets（鍵の流出を止める）、push前に Gemini が差分レビュー、PRで Semgrep/Qodo を束ねる“縦深防御”。毎月1日 Haiku が全リポに再配布してバージョンを自動で揃え、最奥に人間の最終確認（Zion check）を残す。</p>
+        <div class="label">⚙️ 技術メモ</div>
+        <p>MCP＝<b>Model Context Protocol</b>。AI と外部ツールの間の共通規格で、一度対応すればどの対応AIからも同じように叩ける。<code>mcp-jp</code> は各SaaSのAPIを MCPサーバー化して束ねたもの——公式が動くまでの“橋渡し”を、コミュニティ側で先に用意しておくイメージ。</p>
       </div>
     </div>
   </section>
