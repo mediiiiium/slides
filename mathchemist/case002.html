@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>嘘をついても当たる数当て｜確認シート</title>
+<meta name="description" content="7枚のカードに「ある」「ない」で答えると、嘘を見つけて数を当てる手順を1つずつ確かめられます。" />
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --sub:#6f6f6f;
+    --faint:#a8a8a8;
+    --line:#e4e4e4;
+    --soft:#f6f6f4;
+    --bg:#ffffff;
+    --A:#2f6fca;
+    --B:#c8423c;
+    --C:#2e8b57;
+    --fix:#d9822b;
+    --fix-soft:#fdf1e4;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  [hidden]{display:none!important;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  main{max-width:780px;margin:0 auto;padding:32px 16px 72px;}
+  .series{font-size:13px;color:var(--sub);letter-spacing:.04em;margin:0;}
+  h1{font-size:clamp(22px,5.4vw,30px);line-height:1.4;margin:6px 0 14px;}
+  .lead{margin:0 0 8px;font-size:16px;}
+  h2{font-size:19px;margin:40px 0 6px;padding-top:4px;}
+  .hint{font-size:14px;color:var(--sub);margin:0 0 16px;}
+
+  /* ---- 7枚のカード ---- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+  .card{border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column;}
+  .ct{background:var(--ink);color:#fff;font-size:22px;font-weight:700;text-align:center;padding:3px 0 4px;}
+  .ct small{font-size:13px;font-weight:400;margin-left:2px;}
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);row-gap:6px;padding:12px 4px 12px;}
+  .nums span{text-align:center;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .yn{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);margin-top:auto;}
+  .yn button{
+    font:inherit;font-size:16px;font-weight:700;padding:10px 0;border:0;background:#fff;color:var(--sub);cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .yn button + button{border-left:1px solid var(--line);}
+  .yn button[aria-pressed="true"][data-v="1"]{background:var(--ink);color:#fff;}
+  .yn button[aria-pressed="true"][data-v="0"]{background:#dcdcdc;color:var(--ink);}
+  .card.done{border-color:var(--ink);}
+  .card:not(.done) .ct{background:#4a4a4a;}
+  .strip{border:2px solid var(--ink);border-radius:12px;padding:12px 14px 14px;background:var(--soft);}
+  .strip .sh{margin-bottom:6px;}
+  .strip .chip{border-color:#555;cursor:pointer;}
+  .cardctl{margin-top:12px;}
+
+  /* ---- 確認シート ---- */
+  .wait{background:var(--soft);border-radius:10px;padding:16px;color:var(--sub);font-size:15px;margin:0;}
+  .step{border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;margin:0 0 12px;background:#fff;}
+  .sh{font-size:16px;font-weight:700;margin:0 0 10px;}
+  .sh .no{display:inline-block;font-size:13px;font-weight:700;color:#fff;background:var(--ink);border-radius:4px;padding:0 7px;margin-right:8px;vertical-align:2px;}
+  .sh .mem{font-weight:400;color:var(--sub);font-size:14px;}
+  .row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:420px;}
+  .cell{text-align:center;}
+  .cell .cn{font-size:12px;color:var(--sub);line-height:1.4;}
+  .cell .cn b{font-size:16px;color:var(--ink);}
+  .chip{
+    width:100%;max-width:44px;aspect-ratio:1/1;margin:0 auto;border:2px solid #bdbdbd;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;background:#fff;
+  }
+  .cell.off{opacity:.22;}
+  .cell.empty .chip{visibility:hidden;}
+  .cell .add{font-size:17px;font-weight:700;margin-top:2px;}
+  .cell .tag{font-size:11px;color:var(--fix);font-weight:700;line-height:1.3;min-height:1.3em;}
+  .chip.fixed{border-color:var(--fix);background:var(--fix-soft);}
+  .calc{margin:10px 0 0;font-size:16px;}
+  .calc b{font-size:20px;}
+  .nw{white-space:nowrap;}
+  .big{margin:6px 0 0;font-size:18px;font-weight:700;}
+  .big b{font-size:30px;margin:0 2px;}
+  .note{font-size:14px;color:var(--sub);margin:6px 0 0;}
+
+  .ctl{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 0;}
+  .ctl button{
+    font:inherit;font-size:16px;font-weight:700;border-radius:999px;padding:10px 20px;cursor:pointer;
+    border:2px solid var(--ink);background:var(--ink);color:#fff;
+  }
+  .ctl button.ghost{background:#fff;color:var(--ink);}
+
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--sub);}
+  footer p{margin:0 0 10px;}
+  footer a{color:var(--ink);word-break:break-all;}
+</style>
+</head>
+<body>
+<main>
+  <p class="series">mathchemist マスケミスト　Case.002</p>
+  <h1>嘘をついても当たる数当て<br>確認シート</h1>
+  <p class="lead">0から15までの数を1つ思い浮かべて、7枚のカードそれぞれに、その数が書いてあれば「ある」、なければ「ない」と答えてください。嘘は1回までならついてかまいません。</p>
+
+  <h2 id="cardsHead">7枚のカード</h2>
+  <div class="cards" id="cards"></div>
+  <div id="strip" hidden></div>
+  <div class="ctl cardctl" id="cardctl"></div>
+
+  <h2>確認シート</h2>
+  <p class="hint">自分で数えてから1つずつ開けると、手順の答え合わせになります。</p>
+  <div id="sheet"></div>
+  <div class="ctl" id="ctl"></div>
+
+  <footer>
+    <p>嘘が2回あると外れます。見張り役が3枚では、1回ぶんまでしか見分けられません。</p>
+    <p>記事：mathchemist マスケミスト. 数学の不思議な世界（note）<br><a href="https://note.com/mediiiiium/m/m4476e6b0d9b4">https://note.com/mediiiiium/m/m4476e6b0d9b4</a></p>
+    <p>出どころ：ヘカテー「THE CATCHER IN THE LIE ～嘘ありの数当てマジック ハミング符号を添えて～」（第25回日曜数学会）<br><a href="https://www.docswell.com/s/hekatei128/ZEP1R5-2022-12-21-030133">https://www.docswell.com/s/hekatei128/ZEP1R5-2022-12-21-030133</a></p>
+  </footer>
+</main>
+
+<script>
+// 3・5・6・7枚目が 8・4・2・1 の位。1・2・4枚目は見張り（グループA・B・C の「ある」が偶数になるように決める）
+const GROUPS = [
+  {name: "A", pt: 1, cards: [1, 3, 5, 7], color: "var(--A)"},
+  {name: "B", pt: 2, cards: [2, 3, 6, 7], color: "var(--B)"},
+  {name: "C", pt: 4, cards: [4, 5, 6, 7], color: "var(--C)"},
+];
+const ADD = {3: 8, 5: 4, 6: 2, 7: 1};
+function answersOf(n) {
+  const a = {3: n >> 3 & 1, 5: n >> 2 & 1, 6: n >> 1 & 1, 7: n & 1};
+  a[1] = a[3] ^ a[5] ^ a[7];
+  a[2] = a[3] ^ a[6] ^ a[7];
+  a[4] = a[5] ^ a[6] ^ a[7];
+  return a;
+}
+const CARDS = {};
+for (let k = 1; k <= 7; k++) CARDS[k] = [...Array(16).keys()].filter(n => answersOf(n)[k]);
+
+const ans = {};   // カード番号 -> 1（ある）/ 0（ない）
+let shown = 0;    // 開けた手順の数
+let folded = false;  // 7枚答えたらカードを答えの帯に畳む
+
+const cardsEl = document.getElementById("cards");
+const sheetEl = document.getElementById("sheet");
+const ctlEl = document.getElementById("ctl");
+const stripEl = document.getElementById("strip");
+const cardCtlEl = document.getElementById("cardctl");
+const headEl = document.getElementById("cardsHead");
+const complete = () => Object.keys(ans).length === 7;
+function fold(v) {
+  folded = v;
+  render();
+  headEl.scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+for (let k = 1; k <= 7; k++) {
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML = `<div class="ct">${k}<small>枚目</small></div>`
+    + `<div class="nums">${CARDS[k].map(n => `<span>${n}</span>`).join("")}</div>`
+    + `<div class="yn"><button type="button" data-v="1" aria-pressed="false">ある</button>`
+    + `<button type="button" data-v="0" aria-pressed="false">ない</button></div>`;
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    const was = complete();
+    ans[k] = +b.dataset.v;
+    render();
+    // 7枚目を答えたところで畳む（押したのが見えるよう少し待つ）
+    if (!was && complete()) setTimeout(() => fold(true), 400);
+  }));
+  cardsEl.appendChild(el);
+}
+
+function cell(k, {on = true, mark = "", color = "", top = null, add = null, tag = null, fixed = false, empty = false} = {}) {
+  const cls = ["cell", on ? "" : "off", empty ? "empty" : ""].join(" ");
+  const style = color ? ` style="border-color:${color}"` : "";
+  return `<div class="${cls}">`
+    + (top === null ? `<div class="cn"><b>${k}</b>枚目</div>` : top)
+    + `<div class="chip${fixed ? " fixed" : ""}"${style}>${mark}</div>`
+    + (add === null ? "" : `<div class="add">${add}</div>`)
+    + (tag === null ? "" : `<div class="tag">${tag}</div>`)
+    + `</div>`;
+}
+const check = v => v ? "✓" : "";
+
+function steps() {
+  const out = [];
+  let lie = 0;
+  const pts = [];
+  GROUPS.forEach((g, i) => {
+    const count = g.cards.filter(k => ans[k]).length;
+    const p = count % 2 ? g.pt : 0;
+    pts.push(p);
+    lie += p;
+    const row = [1, 2, 3, 4, 5, 6, 7].map(k => g.cards.includes(k)
+      ? cell(k, {mark: check(ans[k]), color: g.color})
+      : cell(k, {on: false, mark: check(ans[k])})).join("");
+    out.push(`<div class="step"><p class="sh"><span class="no">手順${i + 1}</span>`
+      + `<span style="color:${g.color}">グループ${g.name}</span>`
+      + `<span class="mem">（${g.cards.join("・")}枚目）</span></p>`
+      + `<div class="row">${row}</div>`
+      + `<p class="calc">このグループの✓の数 <b>${count}</b>つ <span class="nw">→ `
+      + (count % 2 ? `奇数なので <b style="color:${g.color}">${g.pt}点</b>` : `偶数なので <b>0点</b>`) + `</span></p></div>`);
+  });
+
+  out.push(`<div class="step"><p class="sh"><span class="no">手順4</span>点の合計 ＝ 嘘をついたカード</p>`
+    + `<p class="calc">${pts.join(" ＋ ")} ＝ <b>${lie}</b></p>`
+    + (lie ? `<p class="big">嘘をついたのは <b>${lie}</b>枚目</p>` : `<p class="big">0点なので、嘘はなし</p>`)
+    + `</div>`);
+
+  const fixed = {...ans};
+  if (lie) fixed[lie] ^= 1;
+  const terms = Object.keys(ADD).map(Number).filter(k => fixed[k]).map(k => ADD[k]);
+  const number = terms.reduce((s, x) => s + x, 0);
+  const row = [1, 2, 3, 4, 5, 6, 7].map(k => k in ADD
+    ? cell(k, {mark: check(fixed[k]), add: ADD[k], tag: k === lie ? "反対に" : "", fixed: k === lie})
+    : cell(k, {empty: true, top: `<div class="cn">&nbsp;</div>`, add: "", tag: ""})).join("");
+  let note = "";
+  if (lie && !(lie in ADD)) note = `<p class="note">嘘は見張り役の${lie}枚目なので、3・5・6・7枚目の答えはそのまま使います。</p>`;
+  else if (lie) note = `<p class="note">${lie}枚目だけ、答えの✓を反対にしています。</p>`;
+  out.push(`<div class="step"><p class="sh"><span class="no">手順5</span>本当の答えで足し算</p>`
+    + `<div class="row">${row}</div>${note}`
+    + `<p class="calc">✓のところを足す　${terms.length ? terms.join(" ＋ ") : "0"} ＝ <b>${number}</b></p>`
+    + `<p class="big">思い浮かべた数は <b>${number}</b></p></div>`);
+  return out;
+}
+
+function render() {
+  cardsEl.querySelectorAll(".card").forEach((el, i) => {
+    const k = i + 1;
+    el.classList.toggle("done", k in ans);
+    el.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(ans[k] === +b.dataset.v)));
+  });
+  cardsEl.hidden = folded;
+  stripEl.hidden = !folded;
+  if (folded) {
+    stripEl.innerHTML = `<div class="strip"><p class="sh">答え<span class="mem">（「ある」なら✓）</span></p>`
+      + `<div class="row">${[1, 2, 3, 4, 5, 6, 7].map(k => cell(k, {mark: check(ans[k])})).join("")}</div></div>`;
+    stripEl.querySelectorAll(".chip").forEach(c => c.onclick = () => fold(false));
+    cardCtlEl.innerHTML = `<button type="button" class="ghost" id="open">カードを開いて見直す</button>`;
+    document.getElementById("open").onclick = () => fold(false);
+  } else if (complete()) {
+    cardCtlEl.innerHTML = `<button type="button" class="ghost" id="close">カードを畳む</button>`;
+    document.getElementById("close").onclick = () => fold(true);
+  } else {
+    cardCtlEl.innerHTML = "";
+  }
+  const left = 7 - Object.keys(ans).length;
+  if (left) {
+    sheetEl.innerHTML = `<p class="wait">7枚すべてに答えると、手順を1つずつ開けます（あと${left}枚）。</p>`;
+    ctlEl.innerHTML = "";
+    return;
+  }
+  sheetEl.innerHTML = steps().slice(0, shown).join("");
+  if (shown < 5) {
+    ctlEl.innerHTML = `<button type="button" id="next">手順${shown + 1}を見る</button>`
+      + `<button type="button" class="ghost" id="all">全部見る</button>`;
+    document.getElementById("next").onclick = () => { shown++; render(); };
+    document.getElementById("all").onclick = () => { shown = 5; render(); };
+  } else {
+    ctlEl.innerHTML = `<button type="button" class="ghost" id="again">もう一度やる</button>`;
+    document.getElementById("again").onclick = () => {
+      for (const k in ans) delete ans[k];
+      shown = 0;
+      fold(false);
+    };
+  }
+}
+render();
+</script>
+</body>
+</html>
